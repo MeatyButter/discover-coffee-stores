@@ -1,51 +1,60 @@
+/** HOME.MODULE.CSS **/
+
+/** Mobile first development **/
+
 .container {
-  padding: 0 2rem;
+  margin-bottom: 14rem /* 224px */;
 }
 
 .main {
-  min-height: 100vh;
-  padding: 4rem 0;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  margin-top: 2.5rem /* 40px */;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 72rem /* 1152px */;
+  padding-left: 1rem /* 16px */;
+  padding-right: 1rem /* 16px */;
 }
 
-.title a {
-  color: #0070f3;
-  text-decoration: none;
-}
+/** Breakpoints:
+  sm: min-width: 640px;
+  md: min-width: 768px;
+  lg: min-width: 1024px;
+  xl: min-width: 1280px;
+  2xl: min-width: 1536px;
+**/
 
-.title a:hover,
-.title a:focus,
-.title a:active {
-  text-decoration: underline;
-}
+@media (min-width: 640px) {
+  .container {
+    padding-left: 1rem /* 16px */;
+    padding-right: 1rem /* 16px */;
+  }
 
-.title {
-  margin: 0;
-  line-height: 1.15;
-  font-size: 4rem;
-}
-
-.title {
-  text-align: center;
-}
-
-@media (max-width: 600px) {
-  .grid {
-    width: 100%;
-    flex-direction: column;
+  .main {
+    margin-top: 3rem /* 48px */;
+    padding-left: 1.5rem /* 24px */;
+    padding-right: 1.5rem /* 24px */;
   }
 }
 
-@media (prefers-color-scheme: dark) {
-  .card,
-  .code {
-    background: #111;
+@media (min-width: 768px) {
+  .container {
+    padding-left: 2.5rem /* 40px */;
+    padding-right: 2.5rem /* 40px */;
   }
-  .logo img {
-    filter: invert(1);
+
+  .main {
+    margin-top: 4rem /* 64px */;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    padding-left: 2.5rem /* 40px */;
+    padding-right: 2.5rem /* 40px */;
+  }
+  .main {
+    margin-top: 5rem /* 80px */;
+    padding-left: 2rem /* 32px */;
+    padding-right: 2rem /* 32px */;
   }
 }
