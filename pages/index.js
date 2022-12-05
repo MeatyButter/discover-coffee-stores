@@ -5,12 +5,12 @@ import styles from '../styles/Home.module.css'
 import Banner from '../components/banner';
 import Card from '../components/card';
 
-import coffeeStores from "../data/coffee-stores.json";
+import coffeeStoresData from "../data/coffee-stores.json";
 
 export async function getStaticProps(context){
   return {
     props: {
-      coffeeStores,
+      coffeeStoresData,
     }
   }
 }
@@ -31,17 +31,22 @@ export default function Home(props) {
       <main className={styles.main}>
         <Banner buttonText="View stores nearby" handleOnClick={handleOnBannerButtonClick} />
 
-        <div className={styles.cardLayout}>
-          {props.coffeeStores.map(coffeeStore => {
-            return (<Card 
-              key={coffeeStore.id}
-              name={coffeeStore.name}
-              imgUrl={coffeeStore.imgUrl}
-              href={`/coffee-store/${coffeeStore.id}`}
-              className={styles.card}
-            />)
-          })}
-        </div>
+        {props.coffeeStoresData.length > 0 && 
+          <>
+            <h2 className={styles.heading2}>Toronto Stores</h2>
+            <div className={styles.cardLayout}>
+              {props.coffeeStoresData.map(coffeeStore => {
+                return (<Card 
+                  key={coffeeStore.id}
+                  name={coffeeStore.name}
+                  imgUrl={coffeeStore.imgUrl}
+                  href={`/coffee-store/${coffeeStore.id}`}
+                  className={styles.card}
+                />)
+              })}
+            </div>
+          </>
+        }
       </main>
 
     </div>
