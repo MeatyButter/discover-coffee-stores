@@ -1,63 +1,93 @@
 import { useRouter } from "next/router";
 import Link from "next/link";
 import Head from "next/head";
+import Image from "next/image";
+
+import cls from "classnames";
 
 import coffeeStoresData from "../../data/coffee-stores.json";
 
-export function getStaticProps(staticProps) {
-    const params = staticProps.params;
-    console.log(params)
-    return {
-        props: {
-            coffeeStore: coffeeStoresData.find(coffeeStore => {
-                return coffeeStore.id.toString() === params.id; //dynamic id
-            })
-        }
-    }
+import styles from "../../styles/coffee-store.module.css";
+
+export async function getStaticProps(staticProps) {
+  const params = staticProps.params;
+  console.log("params", params);
+  return {
+    props: {
+      coffeeStore: coffeeStoresData.find((coffeeStore) => {
+        return coffeeStore.id.toString() === params.id; //dynamic id
+      }),
+    },
+  };
 }
 
 export function getStaticPaths() {
-    // To make the paths property dynamic, map through the returned coffeeStore
-    // data and store in a constant to be applied to the return value
-    const paths = coffeeStoresData.map(coffeeStore => {
-        return {
-            params: {
-                id: coffeeStore.id.toString()
-            }
-        }
-    });
-
+  const paths = coffeeStoresData.map((coffeeStore) => {
     return {
-        fallback: true,
-        paths
-    }
+      params: {
+        id: coffeeStore.id.toString(),
+      },
+    };
+  });
+  return {
+    paths,
+    fallback: true,
+  };
 }
 
 const CoffeeStore = (props) => {
-    const router = useRouter();
-    
-    // If the path hasn't been defined in static paths, return a loading state
-    // until the data can be downloaded. If it doesn't exist, it will throw an error
-    // on the second time around.
-    if(router.isFallback) {
-        return <div>loading...</div>;
-    }
+  const router = useRouter();
+  if (router.isFallback) {
+    return <div>Loading...</div>;
+  }
 
-    // Define values after isFallback has been checked as it will not be defined
-    // when running the first time around as it isn't set in the paths property
-    const { address, name, neighbourhood } = props.coffeeStore;
+  const { address, name, neighbourhood, imgUrl } = props.coffeeStore;
 
-    return (
-        <div>
-            <Head>
-                <title>{name}</title>
-            </Head>
-            <Link href="/">Back to Home</Link>
-            <p>{address}</p>
-            <p>{name}</p>
-            <p>{neighbourhood}</p>
+  const handleUpvoteButton = () => {};
+
+  return (
+    <div className={styles.layout}>
+      <Head>
+        <title>{name}</title>
+      </Head>
+      <div className={styles.container}>
+        <div className={styles.col1}>
+          <div className={styles.backToHomeLink}>
+            <Link href="/">Back to home</Link>
+          </div>
+          <div className={styles.nameWrapper}>
+            <h1 className={styles.name}>{name}</h1>
+          </div>
+          <Image
+            src={imgUrl}
+            width={600}
+            height={360}
+            className={styles.storeImg}
+            alt={name}
+          />
         </div>
-    )
-}
+
+        <div className={cls("glass", styles.col2)}>
+          <div className={styles.iconWrapper}>
+            <Image src="/static/icons/places.svg" width="24" height="24" />
+            <p className={styles.text}>{address}</p>
+          </div>
+          <div className={styles.iconWrapper}>
+            <Image src="/static/icons/nearMe.svg" width="24" height="24" />
+            <p className={styles.text}>{neighbourhood}</p>
+          </div>
+          <div className={styles.iconWrapper}>
+            <Image src="/static/icons/star.svg" width="24" height="24" />
+            <p className={styles.text}>1</p>
+          </div>
+
+          <button className={styles.upvoteButton} onClick={handleUpvoteButton}>
+            Up vote!
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export default CoffeeStore;
