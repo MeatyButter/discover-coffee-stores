@@ -32,7 +32,8 @@ html {
   background-position: 50%;
   background-repeat: no-repeat;
   background-size: cover;
-  height: 200%;
+  color: #373b64;
+  height: 100%;
 }
 
 a {
