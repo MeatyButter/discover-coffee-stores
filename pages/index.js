@@ -10,7 +10,7 @@ import { fetchCoffeeStores } from '../lib/coffee-stores';
 
 import useTrackLocation from '../hooks/use-track-location';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 export async function getStaticProps(context){
   const coffeeStores = await fetchCoffeeStores();
@@ -25,6 +25,9 @@ export async function getStaticProps(context){
 export default function Home(props) {
   const { handleTrackLocation, latLong, locationErrorMsg, isFindingLocation } = useTrackLocation();
 
+  const [coffeeStores, setCoffeeStores] = useState('')
+  const [coffeeStoresError, setCoffeeStoresError] = useState(null)
+
   // Set a use effect to manage getting stores by Geolocation
   useEffect(() => {
     // Create an async function that will trigger the fetching of coffee stores
@@ -33,9 +36,11 @@ export default function Home(props) {
         try {
           // Run fetch coffee stores logic and pass new latLong values
           const fetchedCoffeeStores = await fetchCoffeeStores(latLong, 6);
+          setCoffeeStores(fetchedCoffeeStores);
           console.log({ fetchedCoffeeStores });
           //set coffee stores
         } catch (error) {
+          setCoffeeStoresError(error.message);
           //set error
           console.log("Error", { error });
         }
@@ -64,9 +69,26 @@ export default function Home(props) {
           handleOnClick={handleOnBannerBtnClick}
         />
         {locationErrorMsg && <p>Something went wrong: {locationErrorMsg}</p>}
+        {coffeeStoresError && <p>Something went wrong getting sotres</p>}
         <div className={styles.heroImage}>
           <Image src="/static/hero-image.png" width={700} height={400} alt="Hero Image"/>
         </div>
+        {coffeeStores.length > 0 && 
+            <>
+              <h2 className={styles.heading2}>Stores Near Me</h2>
+              <div className={styles.cardLayout}>
+                {coffeeStores.map(coffeeStore => {
+                  return (<Card 
+                    key={coffeeStore.id}
+                    name={coffeeStore.name}
+                    imgUrl={coffeeStore.imgUrl || "https://images.unsplash.com/photo-1504753793650-d4a2b783c15e?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80"}
+                    href={`/coffee-store/${coffeeStore.id}`}
+                    className={styles.card}
+                  />)
+                })}
+              </div>
+            </>
+          }
         <div className={styles.sectionWrapper}>
           {props.coffeeStores.length > 0 && 
             <>
