@@ -10,6 +10,8 @@ import { fetchCoffeeStores } from '../lib/coffee-stores';
 
 import useTrackLocation from '../hooks/use-track-location';
 
+import { useEffect } from 'react';
+
 export async function getStaticProps(context){
   const coffeeStores = await fetchCoffeeStores();
 
@@ -21,14 +23,30 @@ export async function getStaticProps(context){
 }
 
 export default function Home(props) {
-  console.log("props", props);
-
   const { handleTrackLocation, latLong, locationErrorMsg, isFindingLocation } = useTrackLocation();
 
-  console.log({ latLong, locationErrorMsg });
+  // Set a use effect to manage getting stores by Geolocation
+  useEffect(() => {
+    // Create an async function that will trigger the fetching of coffee stores
+    async function setCoffeeStoresByLocation() {
+      if (latLong) {
+        try {
+          // Run fetch coffee stores logic and pass new latLong values
+          const fetchedCoffeeStores = await fetchCoffeeStores(latLong, 6);
+          console.log({ fetchedCoffeeStores });
+          //set coffee stores
+        } catch (error) {
+          //set error
+          console.log("Error", { error });
+        }
+      }
+    }
+    
+    // Trigger the function
+    setCoffeeStoresByLocation();
+  }, [latLong])
 
   const handleOnBannerBtnClick = () => {
-    console.log('Banner button clicked');
     handleTrackLocation();
   }
 
