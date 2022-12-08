@@ -104,7 +104,7 @@ const CoffeeStore = (initialProps) => {
             width={600}
             height={360}
             className={styles.storeImg}
-            alt={name}
+            alt={name || 'coffee house placeholder'}
           />
         </div>
 
