@@ -12,6 +12,7 @@ import useTrackLocation from '../hooks/use-track-location';
 
 import { useEffect, useState, useContext } from 'react';
 import { ACTION_TYPES, StoreContext } from '../store/store-context';
+import getCoffeeStoresByLocation from './api/getCoffeeStoresByLocation';
 
 export async function getStaticProps(context){
   const coffeeStores = await fetchCoffeeStores();
@@ -39,18 +40,22 @@ export default function Home(props) {
       if (latLong) {
         try {
           // Run fetch coffee stores logic and pass new latLong values
-          const fetchedCoffeeStores = await fetchCoffeeStores(latLong, 6);
-          // setCoffeeStores(fetchedCoffeeStores);
+          const response = await fetch(
+            `/api/getCoffeeStoresByLocation?latLong=${latLong}&limit=10`
+          );
+          
+          const coffeeStores = await response.json();
 
           dispatch({
             type: ACTION_TYPES.SET_COFFEE_STORES,
             payload: {
-              coffeeStores: fetchedCoffeeStores
+              coffeeStores
             }
           })
 
-          console.log({ fetchedCoffeeStores });
+          console.log({ coffeeStores });
           //set coffee stores
+          setCoffeeStoresError('');
         } catch (error) {
           setCoffeeStoresError(error.message);
           //set error
