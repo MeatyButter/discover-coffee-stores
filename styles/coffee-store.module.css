@@ -48,7 +48,9 @@
   
     border-radius: 0.75rem /* 12px */;
     max-width: 100%;
-    height: auto;
+    height: 300px;
+    object-fit: cover;
+    
     vertical-align: middle;
     border-style: none;
   }

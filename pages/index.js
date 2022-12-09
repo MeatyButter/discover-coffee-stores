@@ -5,14 +5,12 @@ import styles from '../styles/Home.module.css'
 import Banner from '../components/banner';
 import Card from '../components/card';
 
-import coffeeStoresData from "../data/coffee-stores.json";
 import { fetchCoffeeStores } from '../lib/coffee-stores';
 
 import useTrackLocation from '../hooks/use-track-location';
 
 import { useEffect, useState, useContext } from 'react';
 import { ACTION_TYPES, StoreContext } from '../store/store-context';
-import getCoffeeStoresByLocation from './api/getCoffeeStoresByLocation';
 
 export async function getStaticProps(context){
   const coffeeStores = await fetchCoffeeStores();
@@ -41,7 +39,7 @@ export default function Home(props) {
         try {
           // Run fetch coffee stores logic and pass new latLong values
           const response = await fetch(
-            `/api/getCoffeeStoresByLocation?latLong=${latLong}&limit=10`
+            `/api/getCoffeeStoresByLocation?latLong=${latLong}&limit=6`
           );
           
           const coffeeStores = await response.json();

@@ -27,7 +27,7 @@ body {
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
-html {
+body {
   background: url("/static/background.png");
   background-position: 50%;
   background-repeat: no-repeat;

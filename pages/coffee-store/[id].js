@@ -6,8 +6,8 @@ import Image from "next/image";
 import cls from "classnames";
 
 import styles from "../../styles/coffee-store.module.css";
-import { fetchCoffeeStores } from "../../lib/coffee-stores";
-import { useContext, useEffect, useState } from "react";
+import { fetchCoffeeStores, fetchCoffeeStoreById } from "../../lib/coffee-stores";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { StoreContext } from '../../store/store-context';
 import { isEmpty } from "../../utils";
 
@@ -52,6 +52,12 @@ const CoffeeStore = (initialProps) => {
 
   const id = router.query.id;
 
+  const fetchCoffeeStoreData = useCallback(async (id) => {
+      const response = await fetchCoffeeStoreById(id);
+      setCoffeeStore(response);
+    }
+  )
+
   const [coffeeStore, setCoffeeStore] = useState(initialProps.coffeeStore)
 
   const {
@@ -61,12 +67,14 @@ const CoffeeStore = (initialProps) => {
   } = useContext(StoreContext);
 
   useEffect(() => {
-    if(isEmpty(initialProps.coffeeStore)) {
+    if(isEmpty(initialProps.coffeeStore)) {      
       if (coffeeStores.length > 0) {
         const findCoffeeStoreById = coffeeStores.find((coffeeStore) => {
           return coffeeStore.id.toString() === id; //dynamic id
         })
         setCoffeeStore(findCoffeeStoreById);
+      } else {
+        fetchCoffeeStoreData(id);
       }
     }
   }, [id]);
@@ -96,25 +104,25 @@ const CoffeeStore = (initialProps) => {
             width={600}
             height={360}
             className={styles.storeImg}
-            alt={name}
+            alt={name || 'coffee house placeholder'}
           />
         </div>
 
         <div className={cls("glass", styles.col2)}>
           {address && (
             <div className={styles.iconWrapper}>
-              <Image src="/static/icons/places.svg" width="24" height="24" />
+              <Image src="/static/icons/places.svg" width="24" height="24" alt="address icon" />
               <p className={styles.text}>{address}</p>
             </div>
           )}
           {neighbourhood && (
             <div className={styles.iconWrapper}>
-              <Image src="/static/icons/nearMe.svg" width="24" height="24" />
+              <Image src="/static/icons/nearMe.svg" width="24" height="24" alt="neighbourhood icon" />
               <p className={styles.text}>{neighbourhood}</p>
             </div>
           )}
           <div className={styles.iconWrapper}>
-            <Image src="/static/icons/star.svg" width="24" height="24" />
+            <Image src="/static/icons/star.svg" width="24" height="24" alt="star icon" />
             <p className={styles.text}>1</p>
           </div>
 
